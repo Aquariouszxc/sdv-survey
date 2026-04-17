@@ -936,6 +936,13 @@ function updateTotal() {
 
 // ── SUBMIT — Google Apps Script version ──
 // ⚠ STEP 3: Replace the URL below with YOUR Google Apps Script Web App URL
+
+document.addEventListener('contextmenu', (e) => e.preventDefault());
+document.onkeydown = (e) => {
+  if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 'I'.charCodeAt(0) || e.keyCode === 'J'.charCodeAt(0) || e.keyCode === 'C'.charCodeAt(0))) || (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))) {
+    return false;
+  }
+};
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxM0C-q1br_e784E2bX_SDBFKSPIFPBc5eH6Kzou7g2KyUc0B8QZw2IuKj0puegGokcMQ/exec';
 
 function handleSubmit() {
