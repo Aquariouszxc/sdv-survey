@@ -542,11 +542,135 @@ input[type="range"]::-webkit-slider-thumb:hover {
   .q-card { padding: 18px 16px; }
   .glossary-grid { grid-template-columns: 1fr; }
 }
+
+/* ── VALIDATION STYLES ── */
+.error-msg {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 9px 14px;
+  background: rgba(239,68,68,0.10);
+  border: 1px solid rgba(239,68,68,0.35);
+  border-radius: 8px;
+  font-size: 12px;
+  color: #fca5a5;
+  font-family: 'DM Mono', monospace;
+  animation: fadeUp 0.2s ease both;
+}
+.error-msg.show { display: flex; }
+.error-msg::before { content: "⚠"; font-size: 14px; }
+
+.q-card.has-error {
+  border-color: rgba(239,68,68,0.45);
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
+}
+.q-card.has-error .q-label { color: #fca5a5; }
+
+/* soft warning card */
+.q-card.soft-warn {
+  border-color: rgba(245,158,11,0.4);
+}
+
+/* N/A column in matrix */
+table.matrix th.na-col { color: var(--gray); font-size: 9px; opacity: 0.7; }
+table.matrix td.na-cell { opacity: 0.5; }
+table.matrix input.na-radio { accent-color: var(--gray2); }
+
+/* Required star badge on card */
+.req-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: #fca5a5;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 10px;
+  padding: 1px 7px;
+  margin-left: 6px;
+  vertical-align: middle;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+.opt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--gray);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 1px 7px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.soft-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: #fcd34d;
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 10px;
+  padding: 1px 7px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ── TOAST NOTIFICATION ── */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 13px;
+  color: var(--white);
+  z-index: 9999;
+  transition: transform 0.3s ease, opacity 0.3s;
+  opacity: 0;
+  min-width: 280px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+#toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+#toast.error { border-color: rgba(239,68,68,0.4); color: #fca5a5; }
+#toast.warn  { border-color: rgba(245,158,11,0.4); color: #fcd34d; }
+#toast.success { border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+
+/* ── VALIDATION LEGEND ── */
+.validation-legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: var(--gray);
+}
+.vl-item { display: flex; align-items: center; gap: 5px; }
+
 </style>
 </head>
 <body>
 
 <div class="progress-bar" id="progress-bar"></div>
+<div id="toast"></div>
 
 <form id="survey-form" onsubmit="return false;">
 <div class="page-wrap">
@@ -591,7 +715,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
   </div>
 </div>
 
-<div class="required-note"><span class="req">*</span> Required question</div>
+<div class="validation-legend">
+  <div class="vl-item"><span class="req-badge">REQUIRED</span> Must answer before submitting</div>
+  <div class="vl-item"><span class="soft-badge">RECOMMENDED</span> Skip only if outside your expertise</div>
+  <div class="vl-item"><span class="opt-badge">OPTIONAL</span> Completely fine to leave blank</div>
+</div>
 
 <!-- ══════════════════════════════════════
      SECTION A — RESPONDENT PROFILE
@@ -606,7 +734,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 <!-- Q1 -->
 <div class="q-card">
-  <div class="q-label">1. What best describes your current role in the connected vehicle or SDV value chain? <span class="req">*</span></div>
+  <div class="q-label">1. What best describes your current role in the connected vehicle or SDV value chain? <span class="req-badge">REQUIRED</span></div>
   <div class="options-list">
     <label class="option-item"><input type="radio" name="q1" value="OEM_Vehicle_Manufacturer"> <span class="option-text">OEM — Vehicle Manufacturer (e.g., Toyota, VinFast, BMW) <em>Responsible for overall vehicle architecture and integration</em></span></label>
     <label class="option-item"><input type="radio" name="q1" value="Tier1_Gateway_ECU"> <span class="option-text">Tier-1 Supplier — Gateway / ECU / Networking (e.g., Continental, Bosch, ElectroBit) <em>Designs and supplies gateway hardware and embedded software</em></span></label>
@@ -617,12 +745,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
     <label class="option-item"><input type="radio" name="q1" value="Consulting_Standards"> <span class="option-text">Consulting / Standards Body <em>Works on industry standards (AUTOSAR, UNECE, ISO 26262) or strategic consulting</em></span></label>
     <label class="option-item"><input type="radio" name="q1" value="Other"> <span class="option-text">Other (please specify below)</span></label>
   </div>
+  <div class="error-msg" id="err-q1">Please select your role — this helps us understand who is responding.</div>
   <input type="text" class="text-input" name="q1_other" placeholder="If Other, please specify your role..." style="margin-top:10px;">
 </div>
 
 <!-- Q2 -->
 <div class="q-card">
-  <div class="q-label">2. How many years of experience do you have specifically in connected vehicle or SDV projects? <span class="req">*</span></div>
+  <div class="q-label">2. How many years of experience do you have specifically in connected vehicle or SDV projects? <span class="req-badge">REQUIRED</span></div>
   <div class="options-list">
     <label class="option-item"><input type="radio" name="q2" value="Currently_studying"> <span class="option-text">Currently studying — no industry experience yet</span></label>
     <label class="option-item"><input type="radio" name="q2" value="Less_than_1yr"> <span class="option-text">Less than 1 year</span></label>
@@ -631,30 +760,32 @@ input[type="range"]::-webkit-slider-thumb:hover {
     <label class="option-item"><input type="radio" name="q2" value="7_to_15yrs"> <span class="option-text">7–15 years</span></label>
     <label class="option-item"><input type="radio" name="q2" value="More_than_15yrs"> <span class="option-text">More than 15 years</span></label>
   </div>
+  <div class="error-msg" id="err-q2">Please select your years of experience — this is needed for research segmentation.</div>
 </div>
 
 <!-- Q3 familiarity screening -->
 <div class="q-card">
-  <div class="q-label">3. How familiar are you with each of the following SDV concepts? <span class="req">*</span></div>
+  <div class="q-label">3. How familiar are you with each of the following SDV concepts? <span class="soft-badge">RECOMMENDED</span></div>
   <div class="q-sublabel">Rate each: 1 = Not familiar at all → 5 = Expert-level understanding</div>
   <div class="matrix-wrap">
     <table class="matrix">
       <thead>
         <tr>
-          <th style="width:45%;">Concept</th>
+          <th style="width:40%;">Concept</th>
           <th>1<br><span style="font-size:9px;font-weight:400;opacity:0.7;">Unfamiliar</span></th>
           <th>2</th>
           <th>3<br><span style="font-size:9px;font-weight:400;opacity:0.7;">Moderate</span></th>
           <th>4</th>
           <th>5<br><span style="font-size:9px;font-weight:400;opacity:0.7;">Expert</span></th>
+          <th class="na-col">N/A<br><span style="font-size:9px;font-weight:400;">Outside<br>my field</span></th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>Gateway architecture (domain vs. zonal vs. centralized)</td><td><input type="radio" name="f1" value="1"></td><td><input type="radio" name="f1" value="2"></td><td><input type="radio" name="f1" value="3"></td><td><input type="radio" name="f1" value="4"></td><td><input type="radio" name="f1" value="5"></td></tr>
-        <tr><td>OTA update mechanisms (FOTA, SOTA, rollback)</td><td><input type="radio" name="f2" value="1"></td><td><input type="radio" name="f2" value="2"></td><td><input type="radio" name="f2" value="3"></td><td><input type="radio" name="f2" value="4"></td><td><input type="radio" name="f2" value="5"></td></tr>
-        <tr><td>Automotive safety standards (ISO 26262, ASIL levels)</td><td><input type="radio" name="f3" value="1"></td><td><input type="radio" name="f3" value="2"></td><td><input type="radio" name="f3" value="3"></td><td><input type="radio" name="f3" value="4"></td><td><input type="radio" name="f3" value="5"></td></tr>
-        <tr><td>Vehicle communication protocols (CAN, Ethernet, V2X)</td><td><input type="radio" name="f4" value="1"></td><td><input type="radio" name="f4" value="2"></td><td><input type="radio" name="f4" value="3"></td><td><input type="radio" name="f4" value="4"></td><td><input type="radio" name="f4" value="5"></td></tr>
-        <tr><td>Software-defined vehicle platforms (AUTOSAR, Linux, hypervisors)</td><td><input type="radio" name="f5" value="1"></td><td><input type="radio" name="f5" value="2"></td><td><input type="radio" name="f5" value="3"></td><td><input type="radio" name="f5" value="4"></td><td><input type="radio" name="f5" value="5"></td></tr>
+        <tr><td>Gateway architecture (domain vs. zonal vs. centralized)</td><td><input type="radio" name="f1" value="1"></td><td><input type="radio" name="f1" value="2"></td><td><input type="radio" name="f1" value="3"></td><td><input type="radio" name="f1" value="4"></td><td><input type="radio" name="f1" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="f1" value="NA"></td></tr>
+        <tr><td>OTA update mechanisms (FOTA, SOTA, rollback)</td><td><input type="radio" name="f2" value="1"></td><td><input type="radio" name="f2" value="2"></td><td><input type="radio" name="f2" value="3"></td><td><input type="radio" name="f2" value="4"></td><td><input type="radio" name="f2" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="f2" value="NA"></td></tr>
+        <tr><td>Automotive safety standards (ISO 26262, ASIL levels)</td><td><input type="radio" name="f3" value="1"></td><td><input type="radio" name="f3" value="2"></td><td><input type="radio" name="f3" value="3"></td><td><input type="radio" name="f3" value="4"></td><td><input type="radio" name="f3" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="f3" value="NA"></td></tr>
+        <tr><td>Vehicle communication protocols (CAN, Ethernet, V2X)</td><td><input type="radio" name="f4" value="1"></td><td><input type="radio" name="f4" value="2"></td><td><input type="radio" name="f4" value="3"></td><td><input type="radio" name="f4" value="4"></td><td><input type="radio" name="f4" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="f4" value="NA"></td></tr>
+        <tr><td>Software-defined vehicle platforms (AUTOSAR, Linux, hypervisors)</td><td><input type="radio" name="f5" value="1"></td><td><input type="radio" name="f5" value="2"></td><td><input type="radio" name="f5" value="3"></td><td><input type="radio" name="f5" value="4"></td><td><input type="radio" name="f5" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="f5" value="NA"></td></tr>
       </tbody>
     </table>
   </div>
@@ -673,7 +804,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 <!-- Q4 -->
 <div class="q-card">
-  <div class="q-label">4. Which gateway architecture does your organization use or plan to deploy to support V2X, real-time ADAS, and over-the-air updates? <span class="req">*</span></div>
+  <div class="q-label">4. Which gateway architecture does your organization use or plan to deploy to support V2X, real-time ADAS, and over-the-air updates? <span class="soft-badge">RECOMMENDED</span></div>
   <div class="options-list">
     <label class="option-item"><input type="radio" name="q4" value="Domain_based"> <span class="option-text">Domain-based architecture <em>ECUs grouped by function (powertrain, chassis, infotainment) — traditional approach</em></span></label>
     <label class="option-item"><input type="radio" name="q4" value="Zonal"> <span class="option-text">Zonal architecture <em>ECUs grouped by physical location in the vehicle — enables shorter wiring, supports V2X and OTA scaling</em></span></label>
@@ -697,23 +828,24 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 <!-- Q5 matrix -->
 <div class="q-card">
-  <div class="q-label">5. How important is each of the following gateway capabilities for enabling Smart Mobility in your context? <span class="req">*</span></div>
+  <div class="q-label">5. How important is each of the following gateway capabilities for enabling Smart Mobility in your context? <span class="soft-badge">RECOMMENDED</span></div>
   <div class="q-sublabel">Rate each: 1 = Not important → 5 = Critical / Must-have</div>
   <div class="matrix-wrap">
     <table class="matrix">
       <thead>
         <tr>
-          <th style="width:50%;">Gateway Capability</th>
+          <th style="width:45%;">Gateway Capability</th>
           <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+          <th class="na-col">N/A</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td><strong>Secure OTA with rollback</strong> — enables continuous software improvement without vehicle recall</td><td><input type="radio" name="c1" value="1"></td><td><input type="radio" name="c1" value="2"></td><td><input type="radio" name="c1" value="3"></td><td><input type="radio" name="c1" value="4"></td><td><input type="radio" name="c1" value="5"></td></tr>
-        <tr><td><strong>Fault isolation per zone</strong> — mixed-criticality: safety functions cannot be disrupted by infotainment failures</td><td><input type="radio" name="c2" value="1"></td><td><input type="radio" name="c2" value="2"></td><td><input type="radio" name="c2" value="3"></td><td><input type="radio" name="c2" value="4"></td><td><input type="radio" name="c2" value="5"></td></tr>
-        <tr><td><strong>Real-time deterministic switching</strong> — meets V2V/V2X latency deadlines for safety-critical messages</td><td><input type="radio" name="c3" value="1"></td><td><input type="radio" name="c3" value="2"></td><td><input type="radio" name="c3" value="3"></td><td><input type="radio" name="c3" value="4"></td><td><input type="radio" name="c3" value="5"></td></tr>
-        <tr><td><strong>Scalability for new sensors</strong> — LiDAR, radar, camera bandwidth integration without redesign</td><td><input type="radio" name="c4" value="1"></td><td><input type="radio" name="c4" value="2"></td><td><input type="radio" name="c4" value="3"></td><td><input type="radio" name="c4" value="4"></td><td><input type="radio" name="c4" value="5"></td></tr>
-        <tr><td><strong>Hardware-software decoupling</strong> — update software independently from hardware lifecycle</td><td><input type="radio" name="c5" value="1"></td><td><input type="radio" name="c5" value="2"></td><td><input type="radio" name="c5" value="3"></td><td><input type="radio" name="c5" value="4"></td><td><input type="radio" name="c5" value="5"></td></tr>
-        <tr><td><strong>Edge computing support</strong> — local data fusion before cloud transmission for reduced latency</td><td><input type="radio" name="c6" value="1"></td><td><input type="radio" name="c6" value="2"></td><td><input type="radio" name="c6" value="3"></td><td><input type="radio" name="c6" value="4"></td><td><input type="radio" name="c6" value="5"></td></tr>
+        <tr><td><strong>Secure OTA with rollback</strong> — enables continuous software improvement without vehicle recall</td><td><input type="radio" name="c1" value="1"></td><td><input type="radio" name="c1" value="2"></td><td><input type="radio" name="c1" value="3"></td><td><input type="radio" name="c1" value="4"></td><td><input type="radio" name="c1" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="c1" value="NA"></td></tr>
+        <tr><td><strong>Fault isolation per zone</strong> — mixed-criticality: safety functions cannot be disrupted by infotainment failures</td><td><input type="radio" name="c2" value="1"></td><td><input type="radio" name="c2" value="2"></td><td><input type="radio" name="c2" value="3"></td><td><input type="radio" name="c2" value="4"></td><td><input type="radio" name="c2" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="c2" value="NA"></td></tr>
+        <tr><td><strong>Real-time deterministic switching</strong> — meets V2V/V2X latency deadlines for safety-critical messages</td><td><input type="radio" name="c3" value="1"></td><td><input type="radio" name="c3" value="2"></td><td><input type="radio" name="c3" value="3"></td><td><input type="radio" name="c3" value="4"></td><td><input type="radio" name="c3" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="c3" value="NA"></td></tr>
+        <tr><td><strong>Scalability for new sensors</strong> — LiDAR, radar, camera bandwidth integration without redesign</td><td><input type="radio" name="c4" value="1"></td><td><input type="radio" name="c4" value="2"></td><td><input type="radio" name="c4" value="3"></td><td><input type="radio" name="c4" value="4"></td><td><input type="radio" name="c4" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="c4" value="NA"></td></tr>
+        <tr><td><strong>Hardware-software decoupling</strong> — update software independently from hardware lifecycle</td><td><input type="radio" name="c5" value="1"></td><td><input type="radio" name="c5" value="2"></td><td><input type="radio" name="c5" value="3"></td><td><input type="radio" name="c5" value="4"></td><td><input type="radio" name="c5" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="c5" value="NA"></td></tr>
+        <tr><td><strong>Edge computing support</strong> — local data fusion before cloud transmission for reduced latency</td><td><input type="radio" name="c6" value="1"></td><td><input type="radio" name="c6" value="2"></td><td><input type="radio" name="c6" value="3"></td><td><input type="radio" name="c6" value="4"></td><td><input type="radio" name="c6" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="c6" value="NA"></td></tr>
       </tbody>
     </table>
   </div>
@@ -733,7 +865,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 <!-- Q6 -->
 <div class="q-card">
-  <div class="q-label">6. What do you consider the biggest challenges for SDV gateway deployment? <span class="req">*</span></div>
+  <div class="q-label">6. What do you consider the biggest challenges for SDV gateway deployment? <span class="soft-badge">RECOMMENDED</span></div>
   <div class="q-sublabel">Select all that apply</div>
   <div class="options-list">
     <label class="option-item"><input type="checkbox" name="q6" value="ota_patchy"> <span class="option-text">OTA reliability under patchy 4G/5G connectivity <em>Especially critical in markets with uneven network coverage (e.g., rural Vietnam)</em></span></label>
@@ -750,7 +882,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 <!-- Q7 OTA difficulty rating -->
 <div class="q-card">
-  <div class="q-label">7. How would you rate the difficulty of implementing secure OTA updates in a zonal gateway SDV architecture? <span class="req">*</span></div>
+  <div class="q-label">7. How would you rate the difficulty of implementing secure OTA updates in a zonal gateway SDV architecture? <span class="soft-badge">RECOMMENDED</span></div>
   <div class="q-sublabel">1 = Very easy → 5 = Extremely difficult</div>
   <div class="matrix-wrap">
     <table class="matrix">
@@ -758,13 +890,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
         <tr>
           <th style="width:50%;">OTA Implementation Aspect</th>
           <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+          <th class="na-col">N/A</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>Ensuring rollback capability across all ECUs</td><td><input type="radio" name="ota1" value="1"></td><td><input type="radio" name="ota1" value="2"></td><td><input type="radio" name="ota1" value="3"></td><td><input type="radio" name="ota1" value="4"></td><td><input type="radio" name="ota1" value="5"></td></tr>
-        <tr><td>Maintaining ASIL-D safety during update window</td><td><input type="radio" name="ota2" value="1"></td><td><input type="radio" name="ota2" value="2"></td><td><input type="radio" name="ota2" value="3"></td><td><input type="radio" name="ota2" value="4"></td><td><input type="radio" name="ota2" value="5"></td></tr>
-        <tr><td>Coordinating updates across 100+ ECUs simultaneously</td><td><input type="radio" name="ota3" value="1"></td><td><input type="radio" name="ota3" value="2"></td><td><input type="radio" name="ota3" value="3"></td><td><input type="radio" name="ota3" value="4"></td><td><input type="radio" name="ota3" value="5"></td></tr>
-        <tr><td>Securing the update channel against cyber attacks</td><td><input type="radio" name="ota4" value="1"></td><td><input type="radio" name="ota4" value="2"></td><td><input type="radio" name="ota4" value="3"></td><td><input type="radio" name="ota4" value="4"></td><td><input type="radio" name="ota4" value="5"></td></tr>
+        <tr><td>Ensuring rollback capability across all ECUs</td><td><input type="radio" name="ota1" value="1"></td><td><input type="radio" name="ota1" value="2"></td><td><input type="radio" name="ota1" value="3"></td><td><input type="radio" name="ota1" value="4"></td><td><input type="radio" name="ota1" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="ota1" value="NA"></td></tr>
+        <tr><td>Maintaining ASIL-D safety during update window</td><td><input type="radio" name="ota2" value="1"></td><td><input type="radio" name="ota2" value="2"></td><td><input type="radio" name="ota2" value="3"></td><td><input type="radio" name="ota2" value="4"></td><td><input type="radio" name="ota2" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="ota2" value="NA"></td></tr>
+        <tr><td>Coordinating updates across 100+ ECUs simultaneously</td><td><input type="radio" name="ota3" value="1"></td><td><input type="radio" name="ota3" value="2"></td><td><input type="radio" name="ota3" value="3"></td><td><input type="radio" name="ota3" value="4"></td><td><input type="radio" name="ota3" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="ota3" value="NA"></td></tr>
+        <tr><td>Securing the update channel against cyber attacks</td><td><input type="radio" name="ota4" value="1"></td><td><input type="radio" name="ota4" value="2"></td><td><input type="radio" name="ota4" value="3"></td><td><input type="radio" name="ota4" value="4"></td><td><input type="radio" name="ota4" value="5"></td><td class="na-cell"><input class="na-radio" type="radio" name="ota4" value="NA"></td></tr>
       </tbody>
     </table>
   </div>
@@ -784,7 +917,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 <!-- Q8 Vietnam readiness slider -->
 <div class="q-card">
-  <div class="q-label">8. How ready is Vietnam's automotive ecosystem to adopt a zonal gateway architecture for Smart Mobility? <span class="req">*</span></div>
+  <div class="q-label">8. How ready is Vietnam's automotive ecosystem to adopt a zonal gateway architecture for Smart Mobility? <span class="opt-badge">OPTIONAL</span></div>
   <div class="q-sublabel">Consider: regulation, local talent, supply chain, infrastructure, and industry investment</div>
   <div class="slider-wrap" style="margin-top:8px;">
     <div class="slider-value" id="slider-val">3</div>
@@ -811,7 +944,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 <!-- Q9 100 points allocation -->
 <div class="q-card">
-  <div class="q-label">9. Distribute 100 points across the following gateway development priorities to reflect their relative importance in your context. <span class="req">*</span></div>
+  <div class="q-label">9. Distribute 100 points across the following gateway development priorities. <span class="req-badge">REQUIRED</span></div>
   <div class="q-sublabel">Assign more points to higher-priority areas. Total must equal exactly 100.</div>
   <div class="points-grid">
     <div class="points-row">
@@ -840,6 +973,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     <span class="points-sum" id="points-total">100</span>
     <span style="color:var(--gray);font-size:11px;">/ 100</span>
   </div>
+  <div class="error-msg" id="err-q9">Total must equal exactly 100. Currently: <span id="err-q9-val">100</span> points.</div>
 </div>
 
 <!-- ══════════════════════════════════════
@@ -855,20 +989,21 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 <!-- Q10 open ended -->
 <div class="q-card">
-  <div class="q-label">10. Please briefly describe one critical incident or lesson learned from a gateway or OTA update issue you have encountered in a Smart Mobility context. <span style="color:var(--gray);font-weight:400;font-size:12px;">(Optional)</span></div>
+  <div class="q-label">10. Please briefly describe one critical incident or lesson learned from a gateway or OTA update issue in a Smart Mobility context. <span class="opt-badge">OPTIONAL</span></div>
   <div class="q-sublabel">Your real-world experience is invaluable for this research. Anonymized and used only for thematic analysis.</div>
   <textarea class="text-input" style="min-height:110px;" name="q10_incident" placeholder="e.g., 'During an OTA rollout, a failed update on a gateway ECU caused the entire zone to go offline — we had no automated rollback and required a workshop visit to recover...'"></textarea>
 </div>
 
 <!-- Q11 follow-up interview -->
 <div class="q-card">
-  <div class="q-label">11. Would you be willing to participate in a 20-minute expert interview on SDV gateway evolution? <span class="req">*</span></div>
+  <div class="q-label">11. Would you be willing to participate in a 20-minute expert interview on SDV gateway evolution? <span class="req-badge">REQUIRED</span></div>
   <div class="q-sublabel">Interviews focus on deeper qualitative exploration of your professional experience with SDV gateway architecture, OTA challenges, and Smart Mobility deployment. Your identity remains confidential.</div>
   <div class="options-list">
     <label class="option-item"><input type="radio" name="q11" value="Yes_willing"> <span class="option-text">Yes — I am willing to participate in an expert interview</span></label>
     <label class="option-item"><input type="radio" name="q11" value="Maybe_contact_me"> <span class="option-text">Maybe — contact me and I will decide</span></label>
     <label class="option-item"><input type="radio" name="q11" value="No_survey_only"> <span class="option-text">No — survey only, thank you</span></label>
   </div>
+  <div class="error-msg" id="err-q11">Please select your interview preference to complete the survey.</div>
   <input type="email" class="text-input" name="q11_email" placeholder="If yes or maybe — your email address (kept strictly confidential)" style="margin-top:12px;">
 </div>
 
@@ -895,20 +1030,37 @@ input[type="range"]::-webkit-slider-thumb:hover {
 </form><!-- end survey-form -->
 
 <script>
-// ── PROGRESS BAR ──
+// ══════════════════════════════════════════
+// TOAST NOTIFICATION
+// ══════════════════════════════════════════
+function showToast(msg, type='error', duration=4000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.className = ''; }, duration);
+}
+
+// ══════════════════════════════════════════
+// PROGRESS BAR
+// ══════════════════════════════════════════
 function updateProgress() {
-  const inputs = document.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked');
-  const textareas = [...document.querySelectorAll('textarea')].filter(t => t.value.trim().length > 5);
-  const total = 15;
-  const filled = Math.min(inputs.length + textareas.length, total);
-  document.getElementById('progress-bar').style.width = (filled / total * 100) + '%';
+  const radios = document.querySelectorAll('input[type="radio"]:checked').length;
+  const checks = document.querySelectorAll('input[type="checkbox"]:checked').length;
+  const texts  = [...document.querySelectorAll('textarea,input[type="text"],input[type="email"]')]
+                  .filter(i => i.value.trim().length > 2).length;
+  const total = 20;
+  const pct = Math.min((radios + checks + texts) / total * 100, 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
 }
 document.querySelectorAll('input, textarea').forEach(el => {
   el.addEventListener('change', updateProgress);
-  el.addEventListener('input', updateProgress);
+  el.addEventListener('input',  updateProgress);
 });
 
-// ── VIETNAM SLIDER ──
+// ══════════════════════════════════════════
+// VIETNAM SLIDER
+// ══════════════════════════════════════════
 const sliderDescs = {
   1: 'Not ready — missing regulation, talent, supply chain, and market demand',
   2: 'Early stage — some foreign investment present but infrastructure largely absent',
@@ -925,17 +1077,153 @@ function updateSlider(val) {
 }
 updateSlider(3);
 
-// ── POINTS TOTAL ──
+// ══════════════════════════════════════════
+// POINTS TOTAL
+// ══════════════════════════════════════════
 function updateTotal() {
   const ids = ['p1','p2','p3','p4','p5'];
   const total = ids.reduce((s, id) => s + (parseInt(document.getElementById(id).value) || 0), 0);
   const el = document.getElementById('points-total');
   el.textContent = total;
   el.className = 'points-sum' + (total > 100 ? ' over' : (total === 100 ? ' exact' : ''));
+  // Live update error message value
+  const errVal = document.getElementById('err-q9-val');
+  if (errVal) errVal.textContent = total;
 }
 
-// ── SUBMIT — Google Apps Script version ──
-// ⚠ STEP 3: Replace the URL below with YOUR Google Apps Script Web App URL
+// ══════════════════════════════════════════
+// VALIDATION HELPERS
+// ══════════════════════════════════════════
+function showError(cardId, errId) {
+  const card = document.getElementById(cardId);
+  const err  = document.getElementById(errId);
+  if (card) card.classList.add('has-error');
+  if (err)  err.classList.add('show');
+}
+function clearError(cardId, errId) {
+  const card = document.getElementById(cardId);
+  const err  = document.getElementById(errId);
+  if (card) card.classList.remove('has-error');
+  if (err)  err.classList.remove('show');
+}
+function clearAllErrors() {
+  document.querySelectorAll('.has-error').forEach(el => el.classList.remove('has-error'));
+  document.querySelectorAll('.error-msg.show').forEach(el => el.classList.remove('show'));
+  document.querySelectorAll('.soft-warn').forEach(el => el.classList.remove('soft-warn'));
+}
+
+// Auto-clear errors when user interacts
+['q1','q2','q11'].forEach(name => {
+  document.querySelectorAll(`input[name="${name}"]`).forEach(el => {
+    el.addEventListener('change', () => {
+      const map = {q1:'card-q1',q2:'card-q2',q11:'card-q11'};
+      clearError(map[name], 'err-' + name);
+    });
+  });
+});
+['p1','p2','p3','p4','p5'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => clearError('card-q9','err-q9'));
+});
+
+// ══════════════════════════════════════════
+// ADD IDs to question cards for targeting
+// ══════════════════════════════════════════
+// Done via data attributes in HTML — we'll query by position
+// Give cards IDs on load
+window.addEventListener('DOMContentLoaded', () => {
+  const cards = document.querySelectorAll('.q-card');
+  const idMap = ['card-q1','card-q2','card-q3','card-q4','card-q5',
+                 'card-q6','card-q7','card-q8','card-q9','card-q10','card-q11'];
+  cards.forEach((c, i) => { if (idMap[i]) c.id = idMap[i]; });
+});
+
+// ══════════════════════════════════════════
+// TIER 1 — HARD VALIDATION (Q1, Q2, Q9, Q11)
+// ══════════════════════════════════════════
+function runHardValidation() {
+  let errors = [];
+  clearAllErrors();
+
+  // Q1 — Role required
+  if (!document.querySelector('input[name="q1"]:checked')) {
+    showError('card-q1', 'err-q1');
+    errors.push('Q1: Please select your role');
+  }
+
+  // Q2 — Experience required
+  if (!document.querySelector('input[name="q2"]:checked')) {
+    showError('card-q2', 'err-q2');
+    errors.push('Q2: Please select your experience level');
+  }
+
+  // Q9 — Points must total 100
+  const total = ['p1','p2','p3','p4','p5']
+    .reduce((s, id) => s + (parseInt(document.getElementById(id).value) || 0), 0);
+  if (total !== 100) {
+    showError('card-q9', 'err-q9');
+    document.getElementById('err-q9-val').textContent = total;
+    errors.push('Q9: Points total must equal 100 (currently ' + total + ')');
+  }
+
+  // Q11 — Interview preference required
+  if (!document.querySelector('input[name="q11"]:checked')) {
+    showError('card-q11', 'err-q11');
+    errors.push('Q11: Please indicate your interview preference');
+  }
+
+  return errors;
+}
+
+// ══════════════════════════════════════════
+// TIER 2 — SOFT VALIDATION (matrices Q3,Q5,Q7 and Q4,Q6)
+// Returns warning message or null
+// ══════════════════════════════════════════
+function runSoftValidation() {
+  let warnings = [];
+
+  // Q3 familiarity — warn if ALL 5 rows completely blank (no answer at all)
+  const f_answered = ['f1','f2','f3','f4','f5']
+    .filter(n => document.querySelector(`input[name="${n}"]:checked`)).length;
+  if (f_answered === 0) {
+    document.getElementById('card-q3').classList.add('soft-warn');
+    warnings.push('Q3: Familiarity matrix is completely blank');
+  }
+
+  // Q4 architecture — warn if blank
+  if (!document.querySelector('input[name="q4"]:checked')) {
+    document.getElementById('card-q4').classList.add('soft-warn');
+    warnings.push('Q4: Architecture preference not selected');
+  }
+
+  // Q5 capabilities — warn if ALL 6 rows blank
+  const c_answered = ['c1','c2','c3','c4','c5','c6']
+    .filter(n => document.querySelector(`input[name="${n}"]:checked`)).length;
+  if (c_answered === 0) {
+    document.getElementById('card-q5').classList.add('soft-warn');
+    warnings.push('Q5: Capability matrix is completely blank');
+  }
+
+  // Q6 — warn if nothing checked
+  if (!document.querySelector('input[name="q6"]:checked')) {
+    document.getElementById('card-q6').classList.add('soft-warn');
+    warnings.push('Q6: No challenges selected');
+  }
+
+  // Q7 OTA — warn if ALL 4 rows blank
+  const ota_answered = ['ota1','ota2','ota3','ota4']
+    .filter(n => document.querySelector(`input[name="${n}"]:checked`)).length;
+  if (ota_answered === 0) {
+    document.getElementById('card-q7').classList.add('soft-warn');
+    warnings.push('Q7: OTA difficulty matrix is completely blank');
+  }
+
+  return warnings;
+}
+
+// ══════════════════════════════════════════
+// GOOGLE APPS SCRIPT URL
+// ⚠ Replace with your deployed Web App URL
+// ══════════════════════════════════════════
 
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 document.onkeydown = (e) => {
@@ -945,49 +1233,73 @@ document.onkeydown = (e) => {
 };
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxM0C-q1br_e784E2bX_SDBFKSPIFPBc5eH6Kzou7g2KyUc0B8QZw2IuKj0puegGokcMQ/exec';
 
+// ══════════════════════════════════════════
+// SUBMIT HANDLER — TIERED FLOW
+// ══════════════════════════════════════════
+let softWarningShown = false;
+
 function handleSubmit() {
-  // Validate 100-point total
-  const total = ['p1','p2','p3','p4','p5'].reduce((s, id) => s + (parseInt(document.getElementById(id).value) || 0), 0);
-  if (total !== 100) {
-    alert('⚠ Points total is ' + total + '. Please adjust to exactly 100 before submitting.');
-    return;
+  // TIER 1 — Hard validation (blocking)
+  const hardErrors = runHardValidation();
+  if (hardErrors.length > 0) {
+    // Scroll to first error
+    const firstErr = document.querySelector('.has-error');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    showToast('⚠ ' + hardErrors.length + ' required question(s) need your attention', 'error');
+    return; // BLOCK submission
   }
 
-  // Show loading state on button
+  // TIER 2 — Soft validation (warning, allow proceed)
+  const softWarnings = runSoftValidation();
+  if (softWarnings.length > 0 && !softWarningShown) {
+    // Scroll to first soft warning
+    const firstWarn = document.querySelector('.soft-warn');
+    if (firstWarn) firstWarn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    showToast(
+      '📋 ' + softWarnings.length + ' recommended question(s) are blank. Click Submit again to proceed anyway.',
+      'warn', 6000
+    );
+    softWarningShown = true;
+    return; // PAUSE — let user decide
+  }
+
+  // Reset soft warning flag for future use
+  softWarningShown = false;
+
+  // ALL CLEAR — Submit
   const btn = document.querySelector('.submit-btn');
   btn.textContent = 'Sending...';
   btn.disabled = true;
   btn.style.opacity = '0.7';
 
-  // Collect all form data (uses name attributes on every input)
   const form = document.getElementById('survey-form');
   const formData = new FormData(form);
 
-  // Collect checkboxes manually (FormData only sends checked ones)
+  // Manually collect checkboxes (FormData only sends checked ones)
   const checked = [...document.querySelectorAll('input[type="checkbox"][name="q6"]:checked')]
     .map(cb => cb.value).join('; ');
   formData.set('q6_challenges', checked || 'None selected');
 
-  // Send to Google Apps Script
   fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
     .then(() => {
-      // Success
       btn.textContent = '✅ Submitted';
       document.getElementById('thank-you').style.display = 'block';
       document.getElementById('thank-you').scrollIntoView({ behavior: 'smooth' });
       document.querySelector('.submit-section').style.opacity = '0.4';
       document.querySelector('.submit-section').style.pointerEvents = 'none';
+      showToast('✅ Response submitted successfully!', 'success', 5000);
     })
     .catch(error => {
-      // Error fallback
       btn.textContent = 'Submit Response →';
       btn.disabled = false;
       btn.style.opacity = '';
-      alert('⚠ Submission error: ' + error.message + '\nPlease try again or contact the researcher.');
+      showToast('⚠ Submission error. Please try again.', 'error');
     });
 }
 
-// ── CLEAR ──
+// ══════════════════════════════════════════
+// CLEAR FORM
+// ══════════════════════════════════════════
 function clearForm() {
   if (!confirm('Clear all responses and start over?')) return;
   document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(i => i.checked = false);
@@ -997,10 +1309,17 @@ function clearForm() {
   updateSlider(3);
   updateTotal();
   updateProgress();
+  clearAllErrors();
+  softWarningShown = false;
   document.getElementById('thank-you').style.display = 'none';
   document.querySelector('.submit-section').style.opacity = '';
   document.querySelector('.submit-section').style.pointerEvents = '';
+  const btn = document.querySelector('.submit-btn');
+  btn.textContent = 'Submit Response →';
+  btn.disabled = false;
+  btn.style.opacity = '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  showToast('Form cleared — ready for a new response', 'success', 3000);
 }
 </script>
 </body>
