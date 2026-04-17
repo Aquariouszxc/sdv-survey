@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDV Gateway Evolution Survey — VGU Group 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #080F1E;
+  --bg2:     #0D1829;
+  --card:    #111C30;
+  --border:  rgba(0,200,255,0.15);
+  --border2: rgba(0,200,255,0.08);
+  --cyan:    #00C8FF;
+  --cyan2:   #00F5C8;
+  --blue:    #1A5CFF;
+  --white:   #E8F0FF;
+  --gray:    #7A8FAA;
+  --gray2:   #4A5A70;
+  --accent:  #F59E0B;
+  --red:     #EF4444;
+  --green:   #10B981;
+  --section-a: #7C3AED;
+  --section-b: #1A5CFF;
+  --section-c: #059669;
+  --section-d: #D97706;
+  --section-e: #DC2626;
+  --section-f: #0891B2;
+  --section-g: #7C3AED;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND CIRCUIT PATTERN ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: -300px; right: -300px;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(26,92,255,0.08) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── LAYOUT ── */
+.page-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+/* ── HEADER ── */
+.survey-header {
+  background: linear-gradient(135deg, #0D1829 0%, #111C3A 100%);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--cyan);
+  border-radius: 16px;
+  padding: 36px 40px 32px;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.survey-header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(0,200,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,200,255,0.1);
+  border: 1px solid rgba(0,200,255,0.25);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 16px;
+}
+.survey-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  color: var(--white);
+}
+.survey-title span { color: var(--cyan); }
+.survey-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.meta-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--gray);
+  font-family: 'DM Mono', monospace;
+}
+.meta-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--cyan2);
+}
+
+/* ── INTRO CARD ── */
+.intro-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--cyan);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(232,240,255,0.85);
+}
+.intro-card p { margin-bottom: 12px; }
+.intro-card p:last-child { margin-bottom: 0; }
+.intro-card strong { color: var(--cyan); }
+
+/* ── GLOSSARY ── */
+.glossary {
+  background: rgba(0,200,255,0.04);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin-top: 12px;
+}
+.glossary-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--cyan);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.glossary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 20px;
+}
+.glossary-item {
+  font-size: 11.5px;
+  color: rgba(232,240,255,0.75);
+  line-height: 1.4;
+}
+.glossary-item strong {
+  color: var(--cyan2);
+  font-weight: 500;
+}
+
+/* ── REQUIRED NOTE ── */
+.required-note {
+  font-size: 11px;
+  color: var(--gray);
+  padding: 8px 0 4px;
+  font-family: 'DM Mono', monospace;
+}
+.req { color: var(--red); }
+
+/* ── SECTION HEADER ── */
+.section-header {
+  border-radius: 12px;
+  padding: 16px 24px;
+  margin: 20px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.8;
+  letter-spacing: 0.05em;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+}
+.q-card:focus-within {
+  border-color: rgba(0,200,255,0.3);
+}
+.q-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 4px;
+}
+.q-sublabel {
+  font-size: 11.5px;
+  color: var(--gray);
+  margin-top: -10px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ── TEXT INPUT ── */
+.text-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.text-input:focus {
+  border-color: var(--cyan);
+  background: rgba(0,200,255,0.04);
+}
+.text-input::placeholder { color: var(--gray2); }
+
+textarea.text-input {
+  min-height: 90px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* ── RADIO / CHECKBOX ── */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.option-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.option-item:hover {
+  background: rgba(0,200,255,0.05);
+  border-color: rgba(0,200,255,0.15);
+}
+.option-item input[type="radio"],
+.option-item input[type="checkbox"] {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  accent-color: var(--cyan);
+  cursor: pointer;
+}
+.option-text {
+  font-size: 13px;
+  color: rgba(232,240,255,0.88);
+  line-height: 1.45;
+}
+.option-text em {
+  font-size: 11px;
+  color: var(--gray);
+  display: block;
+  font-style: normal;
+  margin-top: 1px;
+}
+
+/* ── MATRIX TABLE ── */
+.matrix-wrap { overflow-x: auto; }
+table.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 500px;
+}
+table.matrix th {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--cyan);
+  text-align: center;
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.05em;
+}
+table.matrix th:first-child { text-align: left; padding-left: 2px; }
+table.matrix td {
+  padding: 10px 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: rgba(232,240,255,0.85);
+  line-height: 1.4;
+  vertical-align: middle;
+}
+table.matrix td:first-child { padding-left: 2px; font-size: 12.5px; }
+table.matrix tr:last-child td { border-bottom: none; }
+table.matrix tr:hover td { background: rgba(0,200,255,0.03); }
+table.matrix td:not(:first-child) { text-align: center; }
+table.matrix input[type="radio"] {
+  width: 15px; height: 15px;
+  accent-color: var(--cyan);
+  cursor: pointer;
+}
+
+/* ── SCALE LABELS ── */
+.scale-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--gray);
+}
+
+/* ── POINTS INPUT ── */
+.points-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.points-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+}
+.points-label { flex: 1; font-size: 13px; color: rgba(232,240,255,0.85); }
+.points-input {
+  width: 70px;
+  background: rgba(0,200,255,0.06);
+  border: 1px solid rgba(0,200,255,0.2);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: var(--cyan2);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  outline: none;
+}
+.points-input:focus { border-color: var(--cyan); }
+.points-total {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+}
+.points-sum {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cyan2);
+}
+.points-sum.over { color: var(--red); }
+.points-sum.exact { color: var(--green); }
+
+/* ── VIETNAM READINESS SLIDER ── */
+.slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--cyan) 0%, var(--border) 100%);
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px rgba(0,200,255,0.5);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 16px rgba(0,200,255,0.7);
+}
+.slider-value {
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--cyan);
+}
+.slider-desc {
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--gray);
+  font-style: italic;
+  min-height: 18px;
+}
+
+/* ── SUBMIT ── */
+.submit-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.submit-btn {
+  background: linear-gradient(135deg, var(--blue), var(--cyan));
+  border: none;
+  border-radius: 10px;
+  padding: 13px 36px;
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.submit-btn:active { transform: translateY(0); }
+.clear-link {
+  font-size: 12px;
+  color: var(--gray);
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+}
+.clear-link:hover { color: var(--cyan); }
+
+/* ── FOOTER ── */
+.form-footer {
+  text-align: center;
+  margin-top: 32px;
+  font-size: 11px;
+  color: var(--gray2);
+  font-family: 'DM Mono', monospace;
+  line-height: 1.7;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.q-card, .intro-card, .section-header, .survey-header {
+  animation: fadeUp 0.4s ease both;
+}
+.q-card:nth-child(2)  { animation-delay: 0.05s; }
+.q-card:nth-child(3)  { animation-delay: 0.10s; }
+.q-card:nth-child(4)  { animation-delay: 0.15s; }
+.q-card:nth-child(5)  { animation-delay: 0.20s; }
+
+/* progress bar at top */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan), var(--cyan2));
+  width: 0%;
+  z-index: 999;
+  transition: width 0.3s ease;
+}
+
+/* section color utilities */
+.s-a { background: rgba(124,58,237,0.12); border-left: 3px solid var(--section-a); }
+.s-b { background: rgba(26,92,255,0.12);  border-left: 3px solid var(--section-b); }
+.s-c { background: rgba(5,150,105,0.12);  border-left: 3px solid var(--section-c); }
+.s-d { background: rgba(217,119,6,0.12);  border-left: 3px solid var(--section-d); }
+.s-e { background: rgba(220,38,38,0.12);  border-left: 3px solid var(--section-e); }
+.s-f { background: rgba(8,145,178,0.12);  border-left: 3px solid var(--section-f); }
+.s-g { background: rgba(124,58,237,0.12); border-left: 3px solid var(--section-g); }
+
+.dot-a { background: var(--section-a); }
+.dot-b { background: var(--section-b); }
+.dot-c { background: var(--section-c); }
+.dot-d { background: var(--section-d); }
+.dot-e { background: var(--section-e); }
+.dot-f { background: var(--section-f); }
+.dot-g { background: var(--section-g); }
+
+.col-a { color: #c4b5fd; }
+.col-b { color: #93c5fd; }
+.col-c { color: #6ee7b7; }
+.col-d { color: #fcd34d; }
+.col-e { color: #fca5a5; }
+.col-f { color: #67e8f9; }
+
+@media (max-width: 600px) {
+  .page-wrap { padding: 20px 12px 60px; }
+  .survey-header { padding: 24px 20px; }
+  .q-card { padding: 18px 16px; }
+  .glossary-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<form id="survey-form" onsubmit="return false;">
+<div class="page-wrap">
+
+<!-- ══════════════ HEADER ══════════════ -->
+<div class="survey-header">
+  <div class="header-tag">
+    <span>●</span> Research Survey · Smart Mobility Engineering
+  </div>
+  <div class="survey-title">
+    Communication <span>Gateway Evolution</span><br>for Software-Defined Vehicles
+  </div>
+  <p style="font-size:13px;color:var(--gray);margin-top:8px;line-height:1.6;max-width:560px;">
+    Understanding expert perspectives on SDV gateway architecture, OTA update challenges, and integration readiness — with a focus on the Vietnamese automotive ecosystem.
+  </p>
+  <div class="survey-meta">
+    <div class="meta-pill"><div class="meta-dot"></div> Group 4 · VGU Smart Mobility Engineering</div>
+    <div class="meta-pill"><div class="meta-dot" style="background:var(--accent);"></div> ~12–15 minutes</div>
+    <div class="meta-pill"><div class="meta-dot" style="background:var(--green);"></div> Anonymous · Academic use only</div>
+  </div>
+</div>
+
+<!-- ══════════════ INTRO ══════════════ -->
+<div class="intro-card">
+  <p>
+    This survey is part of a research study on <strong>communication gateway evolution for Software-Defined Vehicles (SDVs)</strong> conducted by Group 4 at the Vietnamese-German University (VGU), Smart Mobility Engineering program, Research Methodology course.
+  </p>
+  <p>
+    We are investigating how automotive gateway architectures are evolving — from traditional domain-based systems to zonal and centralized software-defined architectures — and what the key challenges are for OTA updates, safety, scalability, and Vietnam-specific deployment.
+  </p>
+  <p style="margin-bottom:0;">
+    All responses are <strong>completely anonymous</strong> and will be used exclusively for academic research. Results will be aggregated — no individual response will be identified. Thank you for contributing your expertise.
+  </p>
+  <div class="glossary">
+    <div class="glossary-title">📖 Key Terms — Quick Reference</div>
+    <div class="glossary-grid">
+      <div class="glossary-item"><strong>SDV</strong> — Software-Defined Vehicle: a vehicle where software dynamically controls and updates core functions via a central gateway</div>
+      <div class="glossary-item"><strong>Zonal Gateway</strong> — architecture grouping ECUs by physical location (zone) rather than function — reduces wiring, enables scalability</div>
+      <div class="glossary-item"><strong>OTA</strong> — Over-The-Air update: wireless delivery of software updates to vehicle ECUs without physical access</div>
+      <div class="glossary-item"><strong>Mixed-Criticality</strong> — running safety-critical (ASIL-D) and non-critical (infotainment) software on the same platform with isolation</div>
+    </div>
+  </div>
+</div>
+
+<div class="required-note"><span class="req">*</span> Required question</div>
+
+<!-- ══════════════════════════════════════
+     SECTION A — RESPONDENT PROFILE
+══════════════════════════════════════ -->
+<div class="section-header s-a">
+  <div class="meta-dot dot-a" style="width:8px;height:8px;flex-shrink:0;"></div>
+  <div>
+    <div class="section-num col-a">SECTION A</div>
+    <div class="section-title col-a">Respondent Profile</div>
+  </div>
+</div>
+
+<!-- Q1 -->
+<div class="q-card">
+  <div class="q-label">1. What best describes your current role in the connected vehicle or SDV value chain? <span class="req">*</span></div>
+  <div class="options-list">
+    <label class="option-item"><input type="radio" name="q1" value="OEM_Vehicle_Manufacturer"> <span class="option-text">OEM — Vehicle Manufacturer (e.g., Toyota, VinFast, BMW) <em>Responsible for overall vehicle architecture and integration</em></span></label>
+    <label class="option-item"><input type="radio" name="q1" value="Tier1_Gateway_ECU"> <span class="option-text">Tier-1 Supplier — Gateway / ECU / Networking (e.g., Continental, Bosch, ElectroBit) <em>Designs and supplies gateway hardware and embedded software</em></span></label>
+    <label class="option-item"><input type="radio" name="q1" value="Semiconductor_Hardware"> <span class="option-text">Semiconductor / Hardware (e.g., Renesas, NXP, Qualcomm) <em>Designs SoCs, microcontrollers, and gateway chipsets</em></span></label>
+    <label class="option-item"><input type="radio" name="q1" value="Software_Middleware"> <span class="option-text">Software / Middleware (e.g., AUTOSAR, OTA platforms, OS vendors) <em>Provides the software stack running on the gateway ECU</em></span></label>
+    <label class="option-item"><input type="radio" name="q1" value="Connectivity_V2X"> <span class="option-text">Connectivity / V2X Infrastructure <em>Provides network, cloud, or roadside unit infrastructure for SDV communication</em></span></label>
+    <label class="option-item"><input type="radio" name="q1" value="Academic_Research"> <span class="option-text">Academic / Research — Smart Mobility focus <em>University student, researcher, or professor in automotive or mobility systems</em></span></label>
+    <label class="option-item"><input type="radio" name="q1" value="Consulting_Standards"> <span class="option-text">Consulting / Standards Body <em>Works on industry standards (AUTOSAR, UNECE, ISO 26262) or strategic consulting</em></span></label>
+    <label class="option-item"><input type="radio" name="q1" value="Other"> <span class="option-text">Other (please specify below)</span></label>
+  </div>
+  <input type="text" class="text-input" name="q1_other" placeholder="If Other, please specify your role..." style="margin-top:10px;">
+</div>
+
+<!-- Q2 -->
+<div class="q-card">
+  <div class="q-label">2. How many years of experience do you have specifically in connected vehicle or SDV projects? <span class="req">*</span></div>
+  <div class="options-list">
+    <label class="option-item"><input type="radio" name="q2" value="Currently_studying"> <span class="option-text">Currently studying — no industry experience yet</span></label>
+    <label class="option-item"><input type="radio" name="q2" value="Less_than_1yr"> <span class="option-text">Less than 1 year</span></label>
+    <label class="option-item"><input type="radio" name="q2" value="1_to_3yrs"> <span class="option-text">1–3 years</span></label>
+    <label class="option-item"><input type="radio" name="q2" value="3_to_7yrs"> <span class="option-text">3–7 years</span></label>
+    <label class="option-item"><input type="radio" name="q2" value="7_to_15yrs"> <span class="option-text">7–15 years</span></label>
+    <label class="option-item"><input type="radio" name="q2" value="More_than_15yrs"> <span class="option-text">More than 15 years</span></label>
+  </div>
+</div>
+
+<!-- Q3 familiarity screening -->
+<div class="q-card">
+  <div class="q-label">3. How familiar are you with each of the following SDV concepts? <span class="req">*</span></div>
+  <div class="q-sublabel">Rate each: 1 = Not familiar at all → 5 = Expert-level understanding</div>
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th style="width:45%;">Concept</th>
+          <th>1<br><span style="font-size:9px;font-weight:400;opacity:0.7;">Unfamiliar</span></th>
+          <th>2</th>
+          <th>3<br><span style="font-size:9px;font-weight:400;opacity:0.7;">Moderate</span></th>
+          <th>4</th>
+          <th>5<br><span style="font-size:9px;font-weight:400;opacity:0.7;">Expert</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Gateway architecture (domain vs. zonal vs. centralized)</td><td><input type="radio" name="f1" value="1"></td><td><input type="radio" name="f1" value="2"></td><td><input type="radio" name="f1" value="3"></td><td><input type="radio" name="f1" value="4"></td><td><input type="radio" name="f1" value="5"></td></tr>
+        <tr><td>OTA update mechanisms (FOTA, SOTA, rollback)</td><td><input type="radio" name="f2" value="1"></td><td><input type="radio" name="f2" value="2"></td><td><input type="radio" name="f2" value="3"></td><td><input type="radio" name="f2" value="4"></td><td><input type="radio" name="f2" value="5"></td></tr>
+        <tr><td>Automotive safety standards (ISO 26262, ASIL levels)</td><td><input type="radio" name="f3" value="1"></td><td><input type="radio" name="f3" value="2"></td><td><input type="radio" name="f3" value="3"></td><td><input type="radio" name="f3" value="4"></td><td><input type="radio" name="f3" value="5"></td></tr>
+        <tr><td>Vehicle communication protocols (CAN, Ethernet, V2X)</td><td><input type="radio" name="f4" value="1"></td><td><input type="radio" name="f4" value="2"></td><td><input type="radio" name="f4" value="3"></td><td><input type="radio" name="f4" value="4"></td><td><input type="radio" name="f4" value="5"></td></tr>
+        <tr><td>Software-defined vehicle platforms (AUTOSAR, Linux, hypervisors)</td><td><input type="radio" name="f5" value="1"></td><td><input type="radio" name="f5" value="2"></td><td><input type="radio" name="f5" value="3"></td><td><input type="radio" name="f5" value="4"></td><td><input type="radio" name="f5" value="5"></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION B — GATEWAY ARCHITECTURE
+══════════════════════════════════════ -->
+<div class="section-header s-b">
+  <div class="meta-dot dot-b" style="width:8px;height:8px;flex-shrink:0;"></div>
+  <div>
+    <div class="section-num col-b">SECTION B</div>
+    <div class="section-title col-b">Current & Preferred Gateway Architecture</div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-card">
+  <div class="q-label">4. Which gateway architecture does your organization use or plan to deploy to support V2X, real-time ADAS, and over-the-air updates? <span class="req">*</span></div>
+  <div class="options-list">
+    <label class="option-item"><input type="radio" name="q4" value="Domain_based"> <span class="option-text">Domain-based architecture <em>ECUs grouped by function (powertrain, chassis, infotainment) — traditional approach</em></span></label>
+    <label class="option-item"><input type="radio" name="q4" value="Zonal"> <span class="option-text">Zonal architecture <em>ECUs grouped by physical location in the vehicle — enables shorter wiring, supports V2X and OTA scaling</em></span></label>
+    <label class="option-item"><input type="radio" name="q4" value="Centralized_HPC"> <span class="option-text">Centralized / HPC-based architecture <em>Single high-performance compute unit running all vehicle functions — maximum software-defined capability</em></span></label>
+    <label class="option-item"><input type="radio" name="q4" value="Hybrid_transition"> <span class="option-text">Hybrid (domain + zonal transition) <em>Currently transitioning — some domains retained while zonal controllers are introduced</em></span></label>
+    <label class="option-item"><input type="radio" name="q4" value="Not_decided"> <span class="option-text">Not decided / evaluating options</span></label>
+    <label class="option-item"><input type="radio" name="q4" value="Not_applicable"> <span class="option-text">Not applicable to my role</span></label>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION C — SMART MOBILITY CAPABILITIES
+══════════════════════════════════════ -->
+<div class="section-header s-c">
+  <div class="meta-dot dot-c" style="width:8px;height:8px;flex-shrink:0;"></div>
+  <div>
+    <div class="section-num col-c">SECTION C</div>
+    <div class="section-title col-c">Gateway Capability Importance Rating</div>
+  </div>
+</div>
+
+<!-- Q5 matrix -->
+<div class="q-card">
+  <div class="q-label">5. How important is each of the following gateway capabilities for enabling Smart Mobility in your context? <span class="req">*</span></div>
+  <div class="q-sublabel">Rate each: 1 = Not important → 5 = Critical / Must-have</div>
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th style="width:50%;">Gateway Capability</th>
+          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Secure OTA with rollback</strong> — enables continuous software improvement without vehicle recall</td><td><input type="radio" name="c1" value="1"></td><td><input type="radio" name="c1" value="2"></td><td><input type="radio" name="c1" value="3"></td><td><input type="radio" name="c1" value="4"></td><td><input type="radio" name="c1" value="5"></td></tr>
+        <tr><td><strong>Fault isolation per zone</strong> — mixed-criticality: safety functions cannot be disrupted by infotainment failures</td><td><input type="radio" name="c2" value="1"></td><td><input type="radio" name="c2" value="2"></td><td><input type="radio" name="c2" value="3"></td><td><input type="radio" name="c2" value="4"></td><td><input type="radio" name="c2" value="5"></td></tr>
+        <tr><td><strong>Real-time deterministic switching</strong> — meets V2V/V2X latency deadlines for safety-critical messages</td><td><input type="radio" name="c3" value="1"></td><td><input type="radio" name="c3" value="2"></td><td><input type="radio" name="c3" value="3"></td><td><input type="radio" name="c3" value="4"></td><td><input type="radio" name="c3" value="5"></td></tr>
+        <tr><td><strong>Scalability for new sensors</strong> — LiDAR, radar, camera bandwidth integration without redesign</td><td><input type="radio" name="c4" value="1"></td><td><input type="radio" name="c4" value="2"></td><td><input type="radio" name="c4" value="3"></td><td><input type="radio" name="c4" value="4"></td><td><input type="radio" name="c4" value="5"></td></tr>
+        <tr><td><strong>Hardware-software decoupling</strong> — update software independently from hardware lifecycle</td><td><input type="radio" name="c5" value="1"></td><td><input type="radio" name="c5" value="2"></td><td><input type="radio" name="c5" value="3"></td><td><input type="radio" name="c5" value="4"></td><td><input type="radio" name="c5" value="5"></td></tr>
+        <tr><td><strong>Edge computing support</strong> — local data fusion before cloud transmission for reduced latency</td><td><input type="radio" name="c6" value="1"></td><td><input type="radio" name="c6" value="2"></td><td><input type="radio" name="c6" value="3"></td><td><input type="radio" name="c6" value="4"></td><td><input type="radio" name="c6" value="5"></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="scale-labels"><span>1 = Not important</span><span>5 = Critical</span></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION D — BIGGEST CHALLENGES
+══════════════════════════════════════ -->
+<div class="section-header s-d">
+  <div class="meta-dot dot-d" style="width:8px;height:8px;flex-shrink:0;"></div>
+  <div>
+    <div class="section-num col-d">SECTION D</div>
+    <div class="section-title col-d">Biggest Gateway Challenges</div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-card">
+  <div class="q-label">6. What do you consider the biggest challenges for SDV gateway deployment? <span class="req">*</span></div>
+  <div class="q-sublabel">Select all that apply</div>
+  <div class="options-list">
+    <label class="option-item"><input type="checkbox" name="q6" value="ota_patchy"> <span class="option-text">OTA reliability under patchy 4G/5G connectivity <em>Especially critical in markets with uneven network coverage (e.g., rural Vietnam)</em></span></label>
+    <label class="option-item"><input type="checkbox" name="q6" value="asil"> <span class="option-text">Mixed-criticality certification — ISO 26262 ASIL-D for zonal gateways <em>Safety certification of combined safety/non-safety functions on one platform</em></span></label>
+    <label class="option-item"><input type="checkbox" name="q6" value="protocol"> <span class="option-text">Protocol translation latency — CAN ↔ Ethernet affecting real-time V2X <em>Legacy CAN protocol reaching busload limits; migration to Ethernet adds complexity</em></span></label>
+    <label class="option-item"><input type="checkbox" name="q6" value="ecu_scale"> <span class="option-text">Scalability — coordinating 100+ ECUs across software updates <em>Modern vehicles have 150–200 ECUs; each update requires coordination across all</em></span></label>
+    <label class="option-item"><input type="checkbox" name="q6" value="talent"> <span class="option-text">Lack of local talent in SDV-ready embedded software <em>Shortage of engineers with AUTOSAR, Linux gateway, and V2X skills</em></span></label>
+    <label class="option-item"><input type="checkbox" name="q6" value="regulation"> <span class="option-text">Regulatory gap — no local UNECE R155/R156 equivalent <em>Cybersecurity and OTA regulations mandated in EU/Japan but absent in many markets</em></span></label>
+    <label class="option-item"><input type="checkbox" name="q6" value="spof"> <span class="option-text">Single point of failure risk in centralized architectures <em>One HPC failure could disable all vehicle functions simultaneously</em></span></label>
+    <label class="option-item"><input type="checkbox" name="q6" value="other"> <span class="option-text">Other (please specify below)</span></label>
+  </div>
+  <input type="text" class="text-input" name="q6_other" placeholder="Other challenge not listed above..." style="margin-top:10px;">
+</div>
+
+<!-- Q7 OTA difficulty rating -->
+<div class="q-card">
+  <div class="q-label">7. How would you rate the difficulty of implementing secure OTA updates in a zonal gateway SDV architecture? <span class="req">*</span></div>
+  <div class="q-sublabel">1 = Very easy → 5 = Extremely difficult</div>
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th style="width:50%;">OTA Implementation Aspect</th>
+          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Ensuring rollback capability across all ECUs</td><td><input type="radio" name="ota1" value="1"></td><td><input type="radio" name="ota1" value="2"></td><td><input type="radio" name="ota1" value="3"></td><td><input type="radio" name="ota1" value="4"></td><td><input type="radio" name="ota1" value="5"></td></tr>
+        <tr><td>Maintaining ASIL-D safety during update window</td><td><input type="radio" name="ota2" value="1"></td><td><input type="radio" name="ota2" value="2"></td><td><input type="radio" name="ota2" value="3"></td><td><input type="radio" name="ota2" value="4"></td><td><input type="radio" name="ota2" value="5"></td></tr>
+        <tr><td>Coordinating updates across 100+ ECUs simultaneously</td><td><input type="radio" name="ota3" value="1"></td><td><input type="radio" name="ota3" value="2"></td><td><input type="radio" name="ota3" value="3"></td><td><input type="radio" name="ota3" value="4"></td><td><input type="radio" name="ota3" value="5"></td></tr>
+        <tr><td>Securing the update channel against cyber attacks</td><td><input type="radio" name="ota4" value="1"></td><td><input type="radio" name="ota4" value="2"></td><td><input type="radio" name="ota4" value="3"></td><td><input type="radio" name="ota4" value="4"></td><td><input type="radio" name="ota4" value="5"></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="scale-labels"><span>1 = Very easy</span><span>5 = Extremely difficult</span></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION E — VIETNAM READINESS
+══════════════════════════════════════ -->
+<div class="section-header s-e">
+  <div class="meta-dot dot-e" style="width:8px;height:8px;flex-shrink:0;"></div>
+  <div>
+    <div class="section-num col-e">SECTION E</div>
+    <div class="section-title col-e">Vietnam Smart Mobility Readiness</div>
+  </div>
+</div>
+
+<!-- Q8 Vietnam readiness slider -->
+<div class="q-card">
+  <div class="q-label">8. How ready is Vietnam's automotive ecosystem to adopt a zonal gateway architecture for Smart Mobility? <span class="req">*</span></div>
+  <div class="q-sublabel">Consider: regulation, local talent, supply chain, infrastructure, and industry investment</div>
+  <div class="slider-wrap" style="margin-top:8px;">
+    <div class="slider-value" id="slider-val">3</div>
+    <input type="range" min="1" max="5" value="3" id="vietnam-slider" name="q8_vietnam_readiness" oninput="updateSlider(this.value)">
+    <div class="scale-labels">
+      <span>1 — Not ready at all<br><span style="font-size:10px;opacity:0.7;">Missing regulation, talent, supply chain</span></span>
+      <span style="text-align:right;">5 — Fully ready<br><span style="font-size:10px;opacity:0.7;">Can adopt independently</span></span>
+    </div>
+    <div class="slider-desc" id="slider-desc">Partial readiness — some infrastructure exists but significant gaps remain</div>
+  </div>
+  <textarea class="text-input" style="margin-top:14px;" name="q8_vietnam_comment" placeholder="Optional: Please briefly explain your readiness rating for Vietnam..."></textarea>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION F — PRIORITY RANKING
+══════════════════════════════════════ -->
+<div class="section-header s-f">
+  <div class="meta-dot dot-f" style="width:8px;height:8px;flex-shrink:0;"></div>
+  <div>
+    <div class="section-num col-f">SECTION F</div>
+    <div class="section-title col-f">Gateway Development Priorities</div>
+  </div>
+</div>
+
+<!-- Q9 100 points allocation -->
+<div class="q-card">
+  <div class="q-label">9. Distribute 100 points across the following gateway development priorities to reflect their relative importance in your context. <span class="req">*</span></div>
+  <div class="q-sublabel">Assign more points to higher-priority areas. Total must equal exactly 100.</div>
+  <div class="points-grid">
+    <div class="points-row">
+      <div class="points-label">🛡 <strong>Safety</strong> — ASIL-D certification, fault isolation, fail-operational behavior</div>
+      <input type="number" class="points-input" min="0" max="100" value="20" id="p1" name="q9_safety" oninput="updateTotal()">
+    </div>
+    <div class="points-row">
+      <div class="points-label">📡 <strong>OTA Capability</strong> — secure updates, rollback, continuous software improvement</div>
+      <input type="number" class="points-input" min="0" max="100" value="20" id="p2" name="q9_ota" oninput="updateTotal()">
+    </div>
+    <div class="points-row">
+      <div class="points-label">📈 <strong>Scalability</strong> — 100+ ECUs, sensor integration, future-proof architecture</div>
+      <input type="number" class="points-input" min="0" max="100" value="20" id="p3" name="q9_scalability" oninput="updateTotal()">
+    </div>
+    <div class="points-row">
+      <div class="points-label">⚡ <strong>Real-Time Performance</strong> — V2X latency, deterministic switching, ADAS response</div>
+      <input type="number" class="points-input" min="0" max="100" value="20" id="p4" name="q9_realtime" oninput="updateTotal()">
+    </div>
+    <div class="points-row">
+      <div class="points-label">💰 <strong>Cost Reduction</strong> — wiring harness savings, ECU consolidation, OPEX efficiency</div>
+      <input type="number" class="points-input" min="0" max="100" value="20" id="p5" name="q9_cost" oninput="updateTotal()">
+    </div>
+  </div>
+  <div class="points-total">
+    <span style="color:var(--gray);font-size:11px;">Total allocated:</span>
+    <span class="points-sum" id="points-total">100</span>
+    <span style="color:var(--gray);font-size:11px;">/ 100</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION G — QUALITATIVE + FOLLOW-UP
+══════════════════════════════════════ -->
+<div class="section-header s-g">
+  <div class="meta-dot dot-g" style="width:8px;height:8px;flex-shrink:0;"></div>
+  <div>
+    <div class="section-num col-a">SECTION G</div>
+    <div class="section-title col-a">Qualitative Insights & Follow-Up</div>
+  </div>
+</div>
+
+<!-- Q10 open ended -->
+<div class="q-card">
+  <div class="q-label">10. Please briefly describe one critical incident or lesson learned from a gateway or OTA update issue you have encountered in a Smart Mobility context. <span style="color:var(--gray);font-weight:400;font-size:12px;">(Optional)</span></div>
+  <div class="q-sublabel">Your real-world experience is invaluable for this research. Anonymized and used only for thematic analysis.</div>
+  <textarea class="text-input" style="min-height:110px;" name="q10_incident" placeholder="e.g., 'During an OTA rollout, a failed update on a gateway ECU caused the entire zone to go offline — we had no automated rollback and required a workshop visit to recover...'"></textarea>
+</div>
+
+<!-- Q11 follow-up interview -->
+<div class="q-card">
+  <div class="q-label">11. Would you be willing to participate in a 20-minute expert interview on SDV gateway evolution? <span class="req">*</span></div>
+  <div class="q-sublabel">Interviews focus on deeper qualitative exploration of your professional experience with SDV gateway architecture, OTA challenges, and Smart Mobility deployment. Your identity remains confidential.</div>
+  <div class="options-list">
+    <label class="option-item"><input type="radio" name="q11" value="Yes_willing"> <span class="option-text">Yes — I am willing to participate in an expert interview</span></label>
+    <label class="option-item"><input type="radio" name="q11" value="Maybe_contact_me"> <span class="option-text">Maybe — contact me and I will decide</span></label>
+    <label class="option-item"><input type="radio" name="q11" value="No_survey_only"> <span class="option-text">No — survey only, thank you</span></label>
+  </div>
+  <input type="email" class="text-input" name="q11_email" placeholder="If yes or maybe — your email address (kept strictly confidential)" style="margin-top:12px;">
+</div>
+
+<!-- ══════════════ SUBMIT ══════════════ -->
+<div class="submit-section">
+  <button class="submit-btn" onclick="handleSubmit()">Submit Response →</button>
+  <a class="clear-link" onclick="clearForm()">Clear form</a>
+</div>
+
+<!-- THANK YOU (hidden until submit) -->
+<div id="thank-you" style="display:none;margin-top:24px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:24px 28px;text-align:center;">
+  <div style="font-size:32px;margin-bottom:10px;">✅</div>
+  <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green);margin-bottom:6px;">Thank You for Your Response!</div>
+  <div style="font-size:13px;color:rgba(232,240,255,0.75);line-height:1.6;">Your insights have been recorded and will contribute to research on SDV gateway evolution at VGU. Results will be shared with participants upon completion of the study.</div>
+</div>
+
+<div class="form-footer">
+  Group 4 · Smart Mobility Engineering · Vietnamese-German University (VGU)<br>
+  Research Methodology Course · Supervisor: Le Thi Huong<br>
+  This form does not collect personal data unless explicitly provided above.
+</div>
+
+</div><!-- end page-wrap -->
+</form><!-- end survey-form -->
+
+<script>
+// ── PROGRESS BAR ──
+function updateProgress() {
+  const inputs = document.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked');
+  const textareas = [...document.querySelectorAll('textarea')].filter(t => t.value.trim().length > 5);
+  const total = 15;
+  const filled = Math.min(inputs.length + textareas.length, total);
+  document.getElementById('progress-bar').style.width = (filled / total * 100) + '%';
+}
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('change', updateProgress);
+  el.addEventListener('input', updateProgress);
+});
+
+// ── VIETNAM SLIDER ──
+const sliderDescs = {
+  1: 'Not ready — missing regulation, talent, supply chain, and market demand',
+  2: 'Early stage — some foreign investment present but infrastructure largely absent',
+  3: 'Partial readiness — some infrastructure exists but significant gaps remain',
+  4: 'Mostly ready — strong investment, talent developing, regulatory framework forming',
+  5: 'Fully ready — independent capability in SDV gateway development and deployment'
+};
+function updateSlider(val) {
+  document.getElementById('slider-val').textContent = val;
+  document.getElementById('slider-desc').textContent = sliderDescs[val];
+  const slider = document.getElementById('vietnam-slider');
+  const pct = ((val - 1) / 4) * 100;
+  slider.style.background = `linear-gradient(90deg, var(--cyan) ${pct}%, var(--border) ${pct}%)`;
+}
+updateSlider(3);
+
+// ── POINTS TOTAL ──
+function updateTotal() {
+  const ids = ['p1','p2','p3','p4','p5'];
+  const total = ids.reduce((s, id) => s + (parseInt(document.getElementById(id).value) || 0), 0);
+  const el = document.getElementById('points-total');
+  el.textContent = total;
+  el.className = 'points-sum' + (total > 100 ? ' over' : (total === 100 ? ' exact' : ''));
+}
+
+// ── SUBMIT — Google Apps Script version ──
+// ⚠ STEP 3: Replace the URL below with YOUR Google Apps Script Web App URL
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxM0C-q1br_e784E2bX_SDBFKSPIFPBc5eH6Kzou7g2KyUc0B8QZw2IuKj0puegGokcMQ/exec';
+
+function handleSubmit() {
+  // Validate 100-point total
+  const total = ['p1','p2','p3','p4','p5'].reduce((s, id) => s + (parseInt(document.getElementById(id).value) || 0), 0);
+  if (total !== 100) {
+    alert('⚠ Points total is ' + total + '. Please adjust to exactly 100 before submitting.');
+    return;
+  }
+
+  // Show loading state on button
+  const btn = document.querySelector('.submit-btn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+
+  // Collect all form data (uses name attributes on every input)
+  const form = document.getElementById('survey-form');
+  const formData = new FormData(form);
+
+  // Collect checkboxes manually (FormData only sends checked ones)
+  const checked = [...document.querySelectorAll('input[type="checkbox"][name="q6"]:checked')]
+    .map(cb => cb.value).join('; ');
+  formData.set('q6_challenges', checked || 'None selected');
+
+  // Send to Google Apps Script
+  fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
+    .then(() => {
+      // Success
+      btn.textContent = '✅ Submitted';
+      document.getElementById('thank-you').style.display = 'block';
+      document.getElementById('thank-you').scrollIntoView({ behavior: 'smooth' });
+      document.querySelector('.submit-section').style.opacity = '0.4';
+      document.querySelector('.submit-section').style.pointerEvents = 'none';
+    })
+    .catch(error => {
+      // Error fallback
+      btn.textContent = 'Submit Response →';
+      btn.disabled = false;
+      btn.style.opacity = '';
+      alert('⚠ Submission error: ' + error.message + '\nPlease try again or contact the researcher.');
+    });
+}
+
+// ── CLEAR ──
+function clearForm() {
+  if (!confirm('Clear all responses and start over?')) return;
+  document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(i => i.checked = false);
+  document.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(i => i.value = '');
+  document.querySelectorAll('input[type="number"]').forEach(i => i.value = 20);
+  document.getElementById('vietnam-slider').value = 3;
+  updateSlider(3);
+  updateTotal();
+  updateProgress();
+  document.getElementById('thank-you').style.display = 'none';
+  document.querySelector('.submit-section').style.opacity = '';
+  document.querySelector('.submit-section').style.pointerEvents = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
